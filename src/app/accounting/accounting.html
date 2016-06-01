@@ -1,0 +1,97 @@
+<div class="accounting" flex layout="column">
+  <md-toolbar ng-init="accounting.loading=true;">
+    <div class="md-toolbar-tools" layout-align="center center">
+      <h2 class="md-flex"><span class="accounting-loading" ng-show="accounting.loading"><md-icon class="icon-spin">autorenew</md-icon></span>账务</h2>
+    </div>
+  </md-toolbar>
+
+  <md-content layout-padding flex class="content" ng-init="accounting.note=false;">
+  <!-- 申请提款 -->
+  <md-card class="top-green" ng-if="accounting.data.not_draw_list.length>0">
+  <div layout="row" class="">
+    <div flex="30" ng-init="accounting.frame=false;accounting.checked=0">
+          <div layout-margin layout="column" layout-align="space-around start">
+            <!-- 0已申请 1处理中 2 已完成 -->
+            <p class="info" ng-if="accounting.list.last_draw_money.status!=2">可提款金额</p>
+            <h5 class="md-display-1 money">￥{{accounting.data.not_draw_money | number:2}}</h5>
+            <md-button ng-show="!accounting.note" class="btn" ng-click="accounting.frame=!accounting.frame">申请提款</md-button>
+            <p class="note" ng-show="accounting.note">上一单提款申请处理完成后才可以进行下次提款</p>
+            <md-whiteframe ng-show="accounting.frame" class="md-whiteframe-2dp" flex-gt-sm="95" flex-gt-md="75" layout="column" layout-align="space-between center">
+              <md-list md-no-ink ng-cloak>
+                <md-list-item ng-repeat="(key, account) in accounting.data.settlement_account">
+                  <p ng-show="account.type==2">转账银行 ({{account.account | replace}})</p>
+                  <p ng-show="account.type==1">支付宝 ({{account.account | replace}})</p>
+                  <p ng-show="account.type==3">微信 ({{account.account | replace}})</p>
+                  <md-checkbox md-no-ink ng-click="accounting.check(key,account.id)" ng-checked="key==accounting.checked"></md-checkbox>
+                </md-list-item>
+                <md-list-item ng-show="accounting.data.settlement_account.length==0">未绑定提款账户,请联系客服</md-list-item>
+              </md-list>
+              <md-button class="btn" ng-click="accounting.postDraw()" ng-disabled="accounting.data.settlement_account.length==0">确认提款</md-button>
+            </md-whiteframe>
+          </div>
+    </div>
+
+    <div flex="70">
+      <section layout-margin ng-repeat="(key, list) in accounting.data.not_draw_list">
+          <div layout="row" class="layout-fill">
+          <div flex="90">
+            <p class="name">{{list.repair_shop_name}}</p>
+            <h5 class="md-headline money">￥{{list.total_fee | number:2}}</h5>
+          </div>
+          <div flex="20">
+            <!-- 0 未提款 1 提款中 2 已提款 -->
+            <p class="text-center"><span class="label-status green">未提款</span></p>
+            <p class="text-center"><a class="text-link" ng-href="#order{{list.order_id}}" target="_blank">查看相关采购单</a></p>
+          </div>
+          </div>
+          <p class="note">总金额:<span class="fee">￥{{list.fee | number:2}}</span> 平台费:<span class="fee">￥{{list.platform_price | number:2}}</span></p>
+          <p class="note">该交易于 {{list.time}} 完成</p>
+          <br>
+      </section>
+    </div>
+  </div>
+  </md-card>
+
+  <md-card ng-repeat="(key, application) in accounting.data.applications | orderBy:'-last_time'" ng-class="{'top-yellow':application.data[0].status==1,'top-grey':application.data[0].status==2}">
+  <!-- 历史提款 -->
+  <div layout="row" class="">
+    <div flex="30">
+          <div layout-margin layout="column" layout-align="space-around start">
+            <!-- 0已申请 1处理中 2 已完成 -->
+            <p class="info">提款金额</p>
+            <h5 class="md-display-1 money">￥{{application.account.total_fee | number:2}}</h5>
+            <p class="bank-info" ng-show="application.account.way==2">银行转账 ({{application.account.payment_account}})</p>
+            <p class="bank-info" ng-show="application.account.way==1">支付宝 ({{application.account.payment_account}})</p>
+            <p class="bank-info" ng-show="application.account.way==3">微信 ({{application.account.payment_account}})</p>
+            <p class="note">提款申请时间:({{application.account.application_time}})</p>
+            <p class="note">处理结束时间:({{application.account.end_time}})</p>
+          </div>
+    </div>
+
+    <div flex="70">
+      <section layout-margin ng-repeat="(key, data) in application.data">
+          <div layout="row" class="layout-fill">
+          <div flex="80">
+            <p class="name">{{data.repair_shop_name}}</p>
+            <h5 class="md-headline money">￥{{data.total_fee | number:2}}</h5>
+          </div>
+          <div flex="20">
+            <!-- 0 未提款 1 提款中 2 已提款 -->
+            <p class="text-center" ng-if="data.status==0"><span class="label-status green">未提款</span></p>
+            <p class="text-center" ng-if="data.status==1"><span class="label-status amber">提款中</span></p>
+            <p class="text-center" ng-if="data.status==2"><span class="label-status grey">已提款</span></p>
+            <p class="text-center"><a class="text-link" ng-href="#order{{data.order_id}}" target="_blank">查看相关采购单</a></p>
+          </div>
+          </div>
+          <p class="note">总金额:<span class="fee">￥{{data.fee | number:2}}</span> 平台费:<span class="fee">￥{{data.platform_price | number:2}}</span></p>
+          <p class="note">该交易于 {{data.time}} 完成</p>
+          <br>
+      </section>
+    </div>
+  </div>
+  </md-card>
+  <md-backdrop class="md-opaque" ng-show="accounting.frame" ng-click="accounting.frame=!accounting.frame"></md-backdrop>
+
+  </md-content>
+
+</div>

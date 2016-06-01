@@ -1,0 +1,133 @@
+<div class="purchase order" flex layout="column">
+  <md-toolbar ng-init="order.merchantLoading=false;">
+    <div class="md-toolbar-tools" layout-align="center center">
+      <h2 class="md-flex"><span class="merchant-loading" ng-show="order.merchantLoading"><md-icon class="icon-spin">autorenew</md-icon></span>采购单详情</h2>
+    </div>
+  </md-toolbar>
+
+  <md-content layout-padding flex class="purchase-sheet content">
+  <div layout="row" class="">
+    <div flex="30" layout-margin>
+        <md-card>
+          <div class="header" layout="column" layout-align="center center">
+            <img ng-if="!order.profile.repair_shop_account.avatar_url" src="../../assets/image/avatar2.jpg" class="md-card-image" alt="..."/>
+            <img ng-if="order.profile.repair_shop_account.avatar_url" ng-src="{{order.profile.repair_shop_account.avatar_url}}?imageView2/1/w/50/h/50" class="md-card-image" alt="...">
+            <p class="name">{{order.profile.repair_shop_account.name}}</p>
+            <p class="mobile">{{order.profile.repair_shop_account.mobile}}</p>
+          </div>
+          <br>
+          <md-divider></md-divider>
+          <md-card-header>
+            <md-card-avatar>
+              <img class="md-user-avatar" ng-if="!order.profile.repair_shop_account.avatar" src="../../assets/image/avatar2.jpg" alt="..."/>
+              <img class="md-user-avatar" ng-if="order.profile.repair_shop_account.avatar" ng-src="{{order.profile.repair_shop_account.avatar}}?imageView2/1/w/50/h/50" alt="..."/>
+            </md-card-avatar>
+            <md-card-header-text>
+              <p class="md-title">{{order.profile.repair_shop_account.merchant.name}}</p>
+              <p class="md-subhead">
+                <span ng-if="order.profile.repair_shop_account.merchant.real_name_certification" class="circle red">实</span>
+                <span ng-if="order.profile.repair_shop_account.merchant.weipei_certification" class="circle indigo">微</span>
+                <span ng-if="order.profile.repair_shop_account.merchant.logistics_certification" class="circle blue">物</span>
+                <span ng-if="order.profile.repair_shop_account.merchant.invoice_certification" class="circle green">票</span>
+              </p>
+            </md-card-header-text>
+          </md-card-header>
+        </md-card>
+    </div>
+
+    <div flex="70" layout-margin>
+        <md-card>
+
+          <!-- <div class="bar" layout-margin>
+          </div> -->
+          <div layout="row" layout-align="space-between start">
+            <div flex="" layout-margin>
+              <span class="grey">收货单位:</span><span class="md-subhead">{{order.profile.consignee}}</span>
+            </div>
+            <div flex="" layout-margin>
+              <span class="grey">联系电话:</span><span class="md-subhead">{{order.profile.mobile}}</span>
+            </div>
+          </div>
+          <div layout="row" layout-align="space-between start">
+            <div flex="100" layout-margin>
+                <span class="grey">收货地址:</span><span class="md-subhead">{{order.profile.address}}</span>
+            </div>
+          </div>
+          <md-divider></md-divider>
+          <div layout="row" layout-align="space-between start">
+            <div flex="100" layout-margin>
+                <span class="grey">物流:</span>
+                <md-checkbox md-no-ink class="" ng-disabled="true" ng-checked="order.profile.shipping_method == 1">微配直送
+                </md-checkbox>
+                <md-checkbox md-no-ink class="" ng-disabled="true" ng-checked="order.profile.shipping_method == 2">其他物流</md-checkbox>
+            </div>
+          </div>
+        </md-card>
+    </div>
+  </div>
+
+  <div layout="row" class="box" layout-margin>
+        <div flex="30">
+          <div class="" layout="column" layout-align="space-around none">
+            <div class="text-center">
+              <p class="md-title">{{order.profile.title}}</p>
+              <!-- //采购单类型 默认0-正常采购 1-活动采购 2-直发采购 -->
+              <p class="md-caption yellow" ng-show="order.profile.type==0">正常采购</p>
+              <p class="md-caption yellow" ng-show="order.profile.type==1">活动采购</p>
+              <p class="md-caption yellow" ng-show="order.profile.type==2">直发采购</p>
+            </div>
+
+          </div>
+          <md-divider></md-divider>
+          <div class="" layout="column" layout-align="space-around start">
+            <p>共 <span class="yellow">{{order.profile.accessories.length}}</span> 种配件</p>
+            <p class="margin-top-0">合计: <span class="md-display-1 yellow">￥{{order.profile.accessories | getTotal:0}}</span></p>
+          </div>
+          <md-divider></md-divider>
+          <div class="status-icon grey" layout="row" layout-align="space-around center">
+            <div>暂未支付</div>
+            <div>暂未发货</div>
+          </div>
+          <md-divider></md-divider>
+          <br>
+          <div class="text-center" layout-margin>
+            <samll class="grey md-caption">发货及其它功能请使用APP操作</samll>
+          </div>
+        </div>
+        <div flex="70">
+
+            <!-- 报价框 -->
+            <section ng-repeat="(key, accessory) in order.profile.accessories">
+              <div layout="row" layout-align="space-between center" layout-margin class="accessory-item">
+                <div flex="100" class="margin-left-0">
+                    <span class="circle indigo" ng-if="accessory.tag==1">专</span>
+                    <span class="circle blue" ng-if="accessory.tag==2">全</span>
+                    <span class="circle green" ng-if="accessory.tag==3">自</span>
+                    <span class="md-subhead">{{accessory.accessories_title}}</span>
+                    <span class="md-subhead price">￥{{accessory.order_accessories | getTotal}}</span>
+                </div>
+              </div>
+              <md-divider></md-divider>
+
+              <div layout="row" layout-align="space-between center" layout class="md-list-item-text"
+                    ng-repeat="(key, quote) in accessory.order_accessories">
+                <div flex="100">
+                  <p>
+                      <span class="price">{{quote.price | currency:"￥"}}</span>
+                      <span class="num">x {{quote.number}}</span>
+                      <span class="level">{{quote.accessory_level | attributeString:1}}</span>
+                      <span class="quality">|&nbsp;{{quote.accessory_quality_gurantee_period | attributeString:2}}</span>
+                      <span class="arrival">|&nbsp;{{quote.accessories_arrival | attributeString:3}}</span>
+                  </p>
+                  <p class="notes">{{quote.notes}}</p>
+                </div>
+              </div>
+            </section>
+        </div>
+
+  </div>
+
+  </md-content>
+</div>
+
+

@@ -1,0 +1,44 @@
+<div class="login-container" layout="column" layout-align="center center" flex>
+  <md-whiteframe class="md-whiteframe-z1 login-frame" layout layout-align="center center">
+    <md-content layout-align="center center" flex ng-init='show=false'>
+      <a href="javascript:;" class="qrcode-target"
+          ng-class="{'qrcode-target-show':show,'qrcode-target-hide':!show}" ng-click="login.target(show);show = !show">
+          <md-tooltip  md-direction="right">{{login.title}}</md-tooltip>
+      </a>
+      <form name="loginForm" ng-keypress="login.login(loginForm,$event)" layout="column" layout-align="center" flex ng-class="{'hide':show}" ng-init="login.load = false">
+      <!-- <form name="loginForm" layout="column" layout-align="center" flex ng-class="{'hide':show}" ng-init="login.load = false"> -->
+        <div class='logo'>微配IM</div>
+        <md-input-container>
+          <label>电话</label>
+          <input required maxlength="11" ng-pattern="/^1[3|4|5|7|8][0-9]{9}$/" ng-model="login.user.mobile" name="mobile" md-autofocus>
+          <div ng-messages="loginForm.mobile.$error">
+            <div ng-message-exp="['required', 'maxlength', 'pattern']">
+            手机号码格式错误.
+            </div>
+          </div>
+        </md-input-container>
+        <md-input-container>
+          <label>密码</label>
+          <input type="password" minlength="6" ng-model="login.user.password" name="password" required>
+          <div ng-messages="loginForm.password.$error">
+            <div ng-message-exp="['required', 'minlength', 'pattern']">
+            密码长度至少为6位.
+            </div>
+          </div>
+        </md-input-container>
+        <md-button ng-click="login.login(loginForm)" class="md-raised md-warn">
+          <span ng-show="!login.load">登录</span>
+          <span ng-show="login.load" class="progress" flex>
+            <md-progress-circular md-mode="indeterminate" class="md-accent md-hue-2" md-diameter="20px"></md-progress-circular>
+          </span>
+        </md-button>
+      </form>
+      <qrcode version="{{login.v}}" error-correction-level="{{login.e}}" size="{{login.s}}" data="{{login.url}}" ng-class="{'hide':!show}"></qrcode>
+    </md-content>
+  </md-whiteframe>
+  <div class="copyright">
+    <div class="download-link"> 推荐使用<a href="http://rj.baidu.com/soft/detail/14744.html?ald" target="_blank" title="前往下载安装">Chrome浏览器</a></div>
+    <div> © 2015 - {{login.year}} 重庆宜配科技.</div>
+  </div>
+</div>
+

@@ -1,0 +1,28 @@
+.accessory-item{
+  &:hover{
+    cursor: pointer;
+  }
+  md-icon:hover {
+      color: #EF5350;
+  }
+  .circle{
+    position: relative;
+    top: -2px;
+    margin-right: 5px;
+  }
+  .price{
+    font-size:16px;
+    color:#F29F20;
+    margin-left: 10px;
+  }
+  .msg{
+    font-size:16px;
+    color:#EF5350;
+    margin-left: 10px;
+  }
+}
+
+.purchase .purchase-sheet .quote-box-edit input.input-invalid,
+.purchase .purchase-sheet .quote-box-edit md-select.input-invalid md-select-value{
+  border-color: rgb(221,44,0);
+}

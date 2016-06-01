@@ -1,0 +1,336 @@
+<div class="quote" flex layout="column">
+  <md-toolbar>
+    <div class="md-toolbar-tools" layout-align="center center">
+      <h2 class="md-flex">询价单<span ng-if="quote.notFound">{{quote.notFound}}</span></h2>
+    </div>
+  </md-toolbar>
+
+  <md-content layout-padding flex class="content">
+
+  <div layout="row" class="">
+    <div flex="30" layout-margin>
+        <md-card>
+          <div class="header" layout="column" layout-align="center center">
+            <img ng-if="!quote.quoteInfo.repair_shop_account.avatar" ng-src="../../assets/image/avatar2.jpg" class="md-card-image" alt="...">
+            <img ng-if="quote.quoteInfo.repair_shop_account.avatar" ng-src="{{quote.quoteInfo.repair_shop_account.avatar+'?imageView2/1/w/50/h/50'}}" class="md-card-image" alt="...">
+            <p class="name">{{quote.quoteInfo.repair_shop_account.name}}</p>
+            <p class="mobile">{{quote.quoteInfo.repair_shop_account.mobile}}</p>
+          </div>
+          <br>
+          <md-divider></md-divider>
+          <md-card-header>
+            <md-card-avatar>
+              <img class="md-user-avatar" ng-if="!quote.quoteInfo.repair_shop.original_image" src="../../assets/image/avatar2.jpg" alt="..."/>
+              <img class="md-user-avatar" ng-if="quote.quoteInfo.repair_shop.original_image" ng-src="{{quote.quoteInfo.repair_shop.original_image+'?imageView2/1/w/50/h/50'}}" alt="..."/>
+            </md-card-avatar>
+            <md-card-header-text>
+              <p class="md-title">{{quote.quoteInfo.repair_shop.title}}</p>
+              <p class="md-subhead">
+                <span ng-if="quote.quoteInfo.repair_shop.real_name_certification" class="circle red">实</span>
+                <span ng-if="quote.quoteInfo.repair_shop.weipei_certification" class="circle indigo">微</span>
+                <span ng-if="quote.quoteInfo.repair_shop.logistics_certification" class="circle blue">物</span>
+                <span ng-if="quote.quoteInfo.repair_shop.invoice_certification" class="circle green">票</span>
+              </p>
+            </md-card-header-text>
+          </md-card-header>
+        </md-card>
+
+        <div layout="row" layout-align="center center">
+            <p class="colleagues">其他同事的报价</p>
+        </div>
+
+        <md-card>
+        <md-list>
+        <h5 class="colleagues"></h5>
+        <!-- ng-class="{'active': colleague.id === quote.quotationSheetId}" -->
+        <md-list-item ng-repeat="(key, colleague) in quote.quoteInfo.quoted"
+          ng-click="quote.showQuotationSheet('quotation-sheet',colleague)">
+          <div class="quote-item">
+            <div class="ext">
+              <p class="attr">最低至</p>
+              <p class="attr-price">{{colleague.lower_price | currency:"￥"}}</p>
+            </div>
+            <div class="avatar">
+                <img class="img" ng-if="!colleague.avatar" src="../../assets/image/avatar2.jpg" alt="...">
+                <img class="img" ng-if="colleague.avatar" ng-src="{{colleague.avatar+'?imageView2/1/w/50/h/50'}}" alt="...">
+            </div>
+            <div class="info">
+              <h3 class="nickname">
+                  <span class="nickname-text">{{colleague.name}}</span>
+              </h3>
+              <p class="msg">
+                  <span >{{colleague.create | fromNow}} 已报价</span>
+              </p>
+            </div>
+          </div>
+          <md-divider ng-if="!$last"></md-divider>
+        </md-list-item>
+        <md-list-item class="empty-list-hint">
+          暂无同事询价
+        </md-list-item>
+        </md-list>
+        </md-card>
+    </div>
+
+    <md-content layout flex class="quote-box">
+    <div flex layout-margin>
+      <form name="quote.quoteForm">
+        <div layout="row" layout-align="space-between center" class="quote-box-header" layout>
+          <div layout-margin>
+            <p class="brand">{{quote.quoteInfo.automobile_brand_title}} - {{quote.quoteInfo.automobile_series_title}}</p>
+            <p class="series">{{quote.quoteInfo.automobile_model_title}}</p>
+            <p><span class="time">{{quote.quoteInfo.inquiry_sheet_created_at | dateTrans}}</span> 发起询价</p>
+          </div>
+          <div layout-margin>
+            <img class="md-user-avatar" ng-if="!quote.quoteInfo.appearance_thumbnail" src="../../assets/image/avatar2.jpg" alt="..."/>
+            <img class="md-user-avatar" ng-click="quote.showImage($event,quote.quoteInfo.appearance_original)"
+                   ng-if="quote.quoteInfo.appearance_thumbnail" ng-src="{{quote.quoteInfo.appearance_original+'?imageView2/1/w/60/h/60'}}" alt="..."/>
+            <img class="md-user-avatar" ng-if="!quote.quoteInfo.vin_thumbnail" src="../../assets/image/avatar2.jpg" alt="..."/>
+            <img class="md-user-avatar" ng-click="quote.showImage($event,quote.quoteInfo.vin_original)"
+                   ng-if="quote.quoteInfo.vin_thumbnail" ng-src="{{quote.quoteInfo.vin_original+'?imageView2/1/w/60/h/60'}}" alt="..."/>
+          </div>
+        </div>
+        <md-divider></md-divider>
+        <div layout="row" layout-align="space-between center" class="quote-box-header" layout>
+          <div layout-margin>
+            <p class="series">本次询价将于</p>
+            <p><span class="time exipiry">{{quote.quoteInfo.inquiry_sheet_exipiry_time*1000 | dateTrans}}</span> 过期</p>
+          </div>
+          <div layout-margin ng-if="quote.quoteInfo.exipiry_time*1000 > quote.timeStamp">
+            <md-button class="md-raised" ng-show="quote.addQuote" ng-click="quote.cancel()" aria-label="cancel">
+              <span>取消</span>
+            </md-button>
+            <md-button class="btn" ng-click="quote.submit(quote.quoteForm)" aria-label="ok" ng-disabled="quote.addModel!==-1">
+              <!-- 未报过价 -->
+              <span ng-if="!quote.addQuote && quote.quoteInfo.status===1">开始报价</span>
+              <span ng-if="quote.addQuote && quote.quoteInfo.status===1">
+                <span ng-show="!quote.loading">确认报价</span>
+                <span ng-show="quote.loading" class="progress" flex>
+                  <md-progress-circular md-mode="indeterminate" class="md-hue-2" md-diameter="20px"></md-progress-circular>
+                </span>
+              </span>
+              <!-- 修改/添加报价 -->
+              <span ng-if="!quote.addQuote && quote.quoteInfo.status===2">修改报价</span>
+              <span ng-if="quote.addQuote && quote.quoteInfo.status===2">
+                <span ng-show="!quote.loading">确认报价</span>
+                <span ng-show="quote.loading" class="progress" flex>
+                  <md-progress-circular md-mode="indeterminate" class="md-hue-2" md-diameter="20px"></md-progress-circular>
+                </span>
+              </span>
+            </md-button>
+          </div>
+        </div>
+        <md-divider></md-divider>
+        <section ng-repeat="(pkey,accessory) in quote.quoteInfo.quoted_accessories">
+        <!-- tag//配件标签 0 无 1 专项件 2 全车件 3 自定义件 -->
+        <div layout="row" layout-align="space-between center" layout-margin class="accessory-item">
+          <div>
+            <span ng-if="accessory.tag===1" class="circle green">专</span>
+            <span ng-if="accessory.tag===2" class="circle green">全</span>
+            <span ng-if="accessory.tag===3" class="circle green">自</span>{{accessory.accessories_title}}
+          </div>
+          <div layout-margin>
+            <img class="md-user-avatar" ng-click="quote.showImage($event,accessory.accessories_original_image)"
+                   ng-if="accessory.accessories_thumbnail_image" ng-src="{{accessory.accessories_original_image+'?imageView2/1/w/45/h/45'}}" alt="..."/>
+          </div>
+        </div>
+        <md-divider></md-divider>
+
+        <div ng-if="accessory.quoted.length>0" class="accessory-item-info">
+            <div ng-repeat="(key, value) in accessory.quoted">
+              <div layout="row" layout-align="space-between center" layout class="md-list-item-text"
+                ng-mouseover="value.hover=true" ng-mouseleave="value.hover=false"
+                ng-class="{'edit-hover':quote.addQuote}" ng-if="!value.edit">
+                <div flex="95" ng-click="quote.addQuote && quote.editOpen(value,pkey,key)">
+                  <p>
+                      <span class="price">{{value.price | currency:"￥"}}</span>
+                      <span class="level">{{value.accessories_level | attributeString:1}}</span>
+                      <span class="quality">|&nbsp;{{value.accessories_quality_gurantee_period | attributeString:2}}</span>
+                      <span class="arrival">|&nbsp;{{value.accessories_arrival | attributeString:3}}</span>
+                  </p>
+                  <p class="notes">{{value.notes}}</p>
+                </div>
+                <div flex="5" ng-if="quote.addQuote && value.hover && value.new" ng-click="quote.delNew(pkey,key)">
+                  <md-icon>clear</md-icon>
+                </div>
+              </div>
+
+              <div ng-if="value.edit" class="quote-box-edit">
+                <div layout="row" layout-align="space-between center" layout-margin>
+                  <div layout="row" layout-align="space-around center">
+                    <input class="price" type="number" value="value.price" ng-model="value.price" min="0.01">
+                    <md-select class="level" name="level" aria-label="level" ng-model="value.accessories_level" value="value.accessories_level">
+                      <md-option ng-repeat="attr in quote.quoteAttributes[0].attribute_sub" value="{{attr.attribute_id}}" ng-selected="attr.attribute_id==value.accessories_level">
+                        {{attr.attribute_name}}
+                      </md-option>
+                    </md-select>
+                    <md-select class="quality" name="quality" aria-label="quality" ng-model="value.accessories_quality_gurantee_period" value="value.accessories_quality_gurantee_period">
+                      <md-option ng-repeat="attr in quote.quoteAttributes[1].attribute_sub" value="{{attr.attribute_id}}" ng-selected="attr.attribute_id==value.accessories_quality_gurantee_period">
+                        {{attr.attribute_name}}
+                      </md-option>
+                    </md-select>
+                    <md-select class="arrival" name="arrival" aria-label="arrival" ng-model="value.accessories_arrival" value="value.accessories_arrival">
+                      <md-option ng-repeat="attr in quote.quoteAttributes[2].attribute_sub" value="{{attr.attribute_id}}" ng-selected="attr.attribute_id==value.accessories_arrival">
+                        {{attr.attribute_name}}
+                      </md-option>
+                    </md-select>
+                  </div>
+                  <div>
+                    <md-icon ng-click="quote.editCancel()">clear
+                      <md-tooltip  md-direction="bottom">取消编辑</md-tooltip>
+                    </md-icon>
+                    <md-icon ng-click="quote.editDone(value)">done
+                      <md-tooltip  md-direction="bottom">确认修改</md-tooltip>
+                    </md-icon>
+                  </div>
+                </div>
+                <div class="notes">
+                  <input class="note"  type="text" value="value.notes" ng-model="value.notes">
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <!-- 报价框 -->
+        <div class="box" ng-if="pkey === quote.addModel">
+        <md-divider ></md-divider>
+        <div layout-gt-sm="row">
+          <md-input-container flex-gt-sm class="input-price">
+            <label>价格</label>
+            <input type="number"  name="price" ng-model="accessory.myQuote.price" min="0.01" required>
+            <div ng-messages="quote.quoteForm.price.$error">
+              <div ng-message="required" class="input-msg">请输入报价.</div>
+              <div ng-message="min" class="input-msg">最低报价大于0.</div>
+            </div>
+          </md-input-container>
+          <md-input-container flex-gt-sm class="input-level">
+            <label>{{quote.quoteAttributes[0].attribute_name}}</label>
+            <md-select name="level" ng-model="accessory.myQuote.accessories_level" required>
+              <md-option ng-repeat="attr in quote.quoteAttributes[0].attribute_sub" value="{{attr.attribute_id}}">
+                {{attr.attribute_name}}
+              </md-option>
+            </md-select>
+            <div ng-messages="quote.quoteForm.level.$error">
+              <div ng-message="required" class="input-msg">请选择配件级别.</div>
+            </div>
+          </md-input-container>
+          <md-input-container flex-gt-sm class="input-quality">
+            <label>{{quote.quoteAttributes[1].attribute_name}}</label>
+            <md-select name="quality" ng-model="accessory.myQuote.accessories_quality_gurantee_period" required>
+              <md-option ng-repeat="attr in quote.quoteAttributes[1].attribute_sub" value="{{attr.attribute_id}}">
+                {{attr.attribute_name}}
+              </md-option>
+            </md-select>
+            <div ng-messages="quote.quoteForm.quality.$error">
+              <div ng-message="required" class="input-msg">请选择配件质保.</div>
+            </div>
+          </md-input-container>
+          <md-input-container flex-gt-sm class="input-arrival">
+            <label>{{quote.quoteAttributes[2].attribute_name}}</label>
+            <md-select name="arrival" ng-model="accessory.myQuote.accessories_arrival" required>
+              <md-option ng-repeat="attr in quote.quoteAttributes[2].attribute_sub" value="{{attr.attribute_id}}">
+                {{attr.attribute_name}}
+              </md-option>
+            </md-select>
+            <div ng-messages="quote.quoteForm.arrival.$error">
+              <div ng-message="required" class="input-msg">请选择到货情况.</div>
+            </div>
+            <md-icon ng-click="quote.clearAdd(pkey)">clear
+            <md-tooltip  md-direction="bottom">取消添加</md-tooltip>
+            </md-icon>
+          </md-input-container>
+        </div>
+        <div layout-gt-sm="row">
+          <md-input-container class="note" flex-gt-sm ng-init="accessory.myQuote.notes=''">
+            <label>备注</label>
+            <input type="text" ng-model="accessory.myQuote.notes" place-holder="备注">
+          </md-input-container>
+        </div>
+        </div>
+        <!-- 报价框 end -->
+        <div layout="row" layout-align="start center" layout ng-if="quote.addQuote">
+        <md-button class="add-price" ng-click="quote.add(pkey,accessory.inquiry_sheet_accessories_id,accessory.myQuote)">
+          <md-icon>add_circle_outline</md-icon>&nbsp;&nbsp;添加价格
+        </md-button>
+        <p class="msg">{{quote.msg}}</p>
+        </div>
+        <md-divider ng-if="quote.addQuote"></md-divider>
+        </section>
+      </form>
+    </div>
+
+    <!-- 同事询价详情 md-disable-backdrop -->
+    <md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="quotation-sheet" md-is-open="quote.isSideNavOpen">
+      <md-toolbar class="md-theme-light">
+        <h1 flex class="md-toolbar-tools">
+        <span flex="95">{{quote.colleague.name}} 的报价详情</span>
+        <md-icon flex="5" ng-click="quote.close('quotation-sheet')">clear
+        <md-tooltip  md-direction="bottom">关闭</md-tooltip>
+        </md-icon>
+        </h1>
+      </md-toolbar>
+      <md-content>
+
+        <!-- qutation detail  -->
+        <div layout="row" layout-align="space-between center" class="quote-box-header" layout>
+          <div layout-margin>
+            <p class="brand">{{quote.colleaguesQuoteInfo.automobile_brand_title}} - {{quote.colleaguesQuoteInfo.automobile_series_title}}</p>
+            <p class="series">{{quote.colleaguesQuoteInfo.automobile_model_title}}</p>
+            <p><span class="time">{{quote.colleaguesQuoteInfo.created_at | dateTrans}}</span> 发起报价</p>
+          </div>
+          <div layout-margin>
+            <img class="md-user-avatar" ng-if="!quote.colleaguesQuoteInfo.appearance_thumbnail" src="../../assets/image/avatar2.jpg" alt="..."/>
+            <img class="md-user-avatar" ng-click="quote.showImage($event,quote.colleaguesQuoteInfo.appearance_original)"
+                   ng-if="quote.colleaguesQuoteInfo.appearance_thumbnail" ng-src="{{quote.colleaguesQuoteInfo.appearance_thumbnail}}" alt="..."/>
+            <img class="md-user-avatar" ng-if="!quote.colleaguesQuoteInfo.vin_thumbnail" src="../../assets/image/avatar2.jpg" alt="..."/>
+            <img class="md-user-avatar" ng-click="quote.showImage($event,quote.colleaguesQuoteInfo.vin_original)"
+                  ng-if="quote.colleaguesQuoteInfo.vin_thumbnail" ng-src="{{quote.colleaguesQuoteInfo.vin_thumbnail}}" alt="..."/>
+          </div>
+        </div>
+        <md-divider></md-divider>
+        <div layout="row" layout-align="space-between center" class="quote-box-header" layout>
+          <div layout-margin>
+            <p class="series">本次报价将于</p>
+            <p><span class="time exipiry">{{quote.colleaguesQuoteInfo.exipiry_time*1000 | dateTrans}}</span> 过期</p>
+          </div>
+        </div>
+        <md-divider></md-divider>
+        <section ng-repeat="(pkey,accessory) in quote.colleaguesQuoteInfo.quoted_accessories">
+        <div layout="row" layout-align="space-between center" layout-margin class="accessory-item">
+          <div>
+            <span ng-if="accessory.tag===1" class="circle green">专</span>
+            <span ng-if="accessory.tag===2" class="circle green">全</span>
+            <span ng-if="accessory.tag===3" class="circle green">自</span>{{accessory.accessories_title}}
+          </div>
+          <div layout-margin>
+            <img class="md-user-avatar" ng-click="quote.showImage($event,accessory.accessories_original_image)"
+                   ng-if="accessory.accessories_thumbnail_image" ng-src="{{accessory.accessories_original_image+'?imageView2/1/w/45/h/45'}}" alt="..."/>
+          </div>
+        </div>
+        <md-divider></md-divider>
+
+        <div ng-if="accessory.quoted.length>0" class="accessory-item-info">
+            <div ng-repeat="(key, value) in accessory.quoted">
+              <div layout="row" layout-align="space-between center" layout class="md-list-item-text">
+                <div flex>
+                  <p><span class="price">{{value.price | currency:"￥"}}</span>
+                      <span class="level">{{value.accessories_level | attributeString:1}}</span>
+                      <span class="quality">|&nbsp;{{value.accessories_quality_gurantee_period | attributeString:2}}</span>
+                      <span class="arrival">|&nbsp;{{value.accessories_arrival | attributeString:3}}</span></p>
+                  <p class="notes">{{value.notes}}</p>
+                </div>
+              </div>
+            </div>
+        </div>
+        <md-divider ng-if="accessory.quoted.length>0"></md-divider>
+        </section>
+        <!-- qutation detail end -->
+      </md-content>
+    </md-sidenav>
+    <!-- 同事询价详情 end -->
+
+    </md-content>
+  </div>
+  </md-content>
+
+</div>

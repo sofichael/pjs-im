@@ -1,0 +1,32 @@
+{
+  "name": "angular-emojify",
+  "main": "angular-emojify.js",
+  "version": "0.1.2",
+  "description": "Angular directive to emojify unicode chars",
+  "keywords": [
+    "angular",
+    "emojify",
+    "emoji",
+    "unicode",
+    "codegent"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "homepage": "https://github.com/code/angular-emojify",
+  "_release": "0.1.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.1.2",
+    "commit": "5cae615675468e98ce5eaa14fb5c1b5f92f836b6"
+  },
+  "_source": "git://github.com/code/angular-emojify.git",
+  "_target": "~0.1.2",
+  "_originalSource": "angular-emojify",
+  "_direct": true
+}

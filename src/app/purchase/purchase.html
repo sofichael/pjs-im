@@ -1,0 +1,225 @@
+<div class="purchase" flex layout="column" ng-init="purchase.sheet=false">
+  <md-toolbar ng-init="purchase.merchantLoading=false;purchase.getSeriesLoading=false;">
+    <div class="md-toolbar-tools" layout-align="center center">
+      <h2 class="md-flex"><span class="merchant-loading" ng-show="purchase.merchantLoading || purchase.getSeriesLoading"><md-icon class="icon-spin">autorenew</md-icon></span>直发采购</h2>
+    </div>
+  </md-toolbar>
+
+  <div layout-padding flex class="purchase-code content">
+  <div layout="row" class="">
+    <div flex="100" layout-margin>
+        <md-card ng-init="purchase.checkMsg=false;purchase.checkCodeLoading=false">
+          <div class="header" layout="column" layout-align="center center">
+              <h3 class="md-title">请输入维修厂所提供的收单码</h3>
+          </div>
+          <div class="input-code" layout="column" layout-align="center center">
+                <input type="text" ng-model="purchase.code" maxlength="8">
+                <p class="msg" ng-show="purchase.checkMsg">{{purchase.msg}}</p>
+          </div>
+          <div class="" layout="column" layout-align="center center">
+            <md-button class="btn" ng-click="purchase.checkCode(purchase.code)">
+                <span ng-show="!purchase.checkCodeLoading">确定</span>
+                <span  class="progress" flex ng-show="purchase.checkCodeLoading">
+                  <md-progress-circular md-mode="indeterminate" class="md-hue-2" md-diameter="20px"></md-progress-circular>
+                </span>
+            </md-button>
+          </div>
+          <br>
+          <md-divider></md-divider>
+          <div class="code-img">
+          </div>
+        </md-card>
+    </div>
+  </div>
+  </div>
+
+  <md-content layout-padding flex class="purchase-sheet content" ng-show="purchase.sheet">
+  <div layout="row" class="">
+    <div flex="30" layout-margin>
+        <md-card>
+          <div class="header" layout="column" layout-align="center center">
+            <img ng-if="!purchase.purchaseSheet.avatar_url" src="../../assets/image/avatar2.jpg" class="md-card-image" alt="..."/>
+            <img ng-if="purchase.purchaseSheet.avatar_url" ng-src="{{purchase.purchaseSheet.avatar_url}}?imageView2/1/w/50/h/50" class="md-card-image" alt="...">
+            <p class="name">{{purchase.purchaseSheet.realname}}</p>
+            <p class="mobile">{{purchase.purchaseSheet.mobile}}</p>
+          </div>
+          <br>
+          <md-divider></md-divider>
+          <md-card-header>
+            <md-card-avatar>
+              <img class="md-user-avatar" ng-if="!purchase.purchaseSheet.merchant.image" src="../../assets/image/avatar2.jpg" alt="..."/>
+              <img class="md-user-avatar" ng-if="purchase.purchaseSheet.merchant.image" ng-src="{{purchase.purchaseSheet.merchant.image}}?imageView2/1/w/50/h/50" alt="..."/>
+            </md-card-avatar>
+            <md-card-header-text>
+              <p class="md-title">{{purchase.purchaseSheet.merchant.name}}</p>
+              <p class="md-subhead">
+                <span ng-if="purchase.purchaseSheet.merchant.real_name_certification" class="circle red">实</span>
+                <span ng-if="purchase.purchaseSheet.merchant.weipei_certification" class="circle indigo">微</span>
+                <span ng-if="purchase.purchaseSheet.merchant.logistics_certification" class="circle blue">物</span>
+                <span ng-if="purchase.purchaseSheet.merchant.invoice_certification" class="circle green">票</span>
+              </p>
+            </md-card-header-text>
+          </md-card-header>
+        </md-card>
+    </div>
+
+    <div flex="70" layout-margin>
+        <md-card>
+          <div layout="row" layout-align="space-between start">
+            <div flex="" layout-margin>
+              <span class="grey">收货单位:</span><span class="md-subhead">{{purchase.purchaseSheet.merchant.name}}</span>
+            </div>
+            <div flex="" layout-margin>
+              <span class="grey">联系电话:</span><span class="md-subhead">{{purchase.purchaseSheet.merchant.contact_number}}</span>
+            </div>
+          </div>
+          <div layout="row" layout-align="space-between start">
+            <div flex="100" layout-margin>
+                <span class="grey">收货地址:</span><span class="md-subhead">{{purchase.purchaseSheet.merchant.address}}</span>
+            </div>
+          </div>
+          <md-divider></md-divider>
+          <div layout="row" layout-align="space-between start">
+            <div flex="100" layout-margin ng-init="purchase.isSupportLoading=true;">
+                <span class="grey">物流:</span>
+                <md-checkbox md-no-ink class="" ng-disabled="!purchase.isSupport" ng-checked="purchase.checked == 1" ng-click="purchase.toggle(1)">微配直送
+                <md-tooltip  md-direction="bottom" ng-show="purchase.checked == 2 || purchase.isSupport">该修理厂与配件商不在相同区域范围内，暂不支持微配直送</md-tooltip>
+                </md-checkbox>
+                <md-checkbox md-no-ink class="" ng-checked="purchase.checked == 2" ng-click="purchase.toggle(2)">其他物流</md-checkbox>
+                <span ng-show="purchase.isSupportLoading"><md-icon class="icon-spin">autorenew</md-icon> <span class="grey">检测是否支持微配物流...</span></span>
+            </div>
+          </div>
+        </md-card>
+    </div>
+  </div>
+
+  <div layout="row" class="box" layout-margin>
+        <div flex="30">
+          <div class="" layout="column" layout-align="space-around none">
+            <div class="text-center">
+              <p class="md-body-2">车型 {{purchase.carBrand.title}} {{purchase.carSeries.title}}</p>
+            </div>
+            <div class="" ng-init="purchase.toggleCarLoading=false;">
+              <md-button class="btn add-car-btn" md-no-ink ng-click="purchase.toggleCar()">
+                <span ng-show="!purchase.toggleCarLoading">点击选择车型</span>
+                <span  class="progress" flex ng-show="purchase.toggleCarLoading">
+                  <md-progress-circular md-mode="indeterminate" class="md-hue-2" md-diameter="20px"></md-progress-circular>
+                </span>
+              </md-button>
+            </div>
+            <div class="" layout-margin>
+              <samll class="grey md-caption">请选择正确的车型,我们将以您选择的车型作为你发货正确与否的凭证</samll>
+            </div>
+          </div>
+          <md-divider></md-divider>
+          <div class="" layout="column" layout-align="space-around start">
+            <p>共 <span class="yellow">{{purchase.items.length}}</span> 种配件</p>
+            <p class="margin-top-0">合计: <span class="md-headline yellow">￥{{purchase.items | getTotal:1}}</span></p>
+          </div>
+          <md-divider></md-divider>
+          <br>
+          <div class="" layout="column" layout-align="space-around center" ng-init="purchase.submitMsg=false;">
+            <md-button class="btn btn-submit" ng-click="purchase.submit()">
+                <span ng-show="!purchase.submitLoading">确认信息并发给维修厂</span>
+                <span  class="progress" flex ng-show="purchase.submitLoading">
+                  <md-progress-circular md-mode="indeterminate" class="md-hue-2" md-diameter="20px"></md-progress-circular>
+                </span>
+            </md-button>
+             <span class="md-subhead msg" ng-show="purchase.submitMsg">{{purchase.submitMsg}}</span>
+          </div>
+        </div>
+        <div flex="70">
+            <div class="search-icon auto-complete" ng-click="purchase.autocomplete()"><md-icon ng-class="{'grey':conversation.searchIcon}">search</md-icon><span class="grey" ng-show="!purchase.searchText">搜索配件</span></div>
+            <div class="item-icon" ng-if="purchase.item">
+              <span class="circle indigo" ng-if="purchase.item.tag==1">专</span>
+              <span class="circle blue" ng-if="purchase.item.tag==2">全</span>
+              <span class="circle green" ng-if="purchase.item.tag==3">自</span>
+            </div>
+            <md-autocomplete
+            ng-disabled="purchase.isDisabled"
+            md-no-cache="true"
+            md-selected-item="purchase.selectedItem"
+            md-search-text-change="purchase.searchTextChange(purchase.searchText)"
+            md-search-text="purchase.searchText"
+            md-selected-item-change="purchase.selectedItemChange(item)"
+            md-items="item in purchase.querySearch(purchase.searchText)"
+            md-item-text="item.title"
+            md-min-length="0"
+            md-no-asterisk="false"
+            placeholder="">
+            <!-- ng-mouseleave="purchase.mouseleave()" -->
+            <md-item-template>
+              <span class="circle indigo" ng-if="item.tag==1">专</span>
+              <span class="circle blue" ng-if="item.tag==2">全</span>
+              <span class="circle green" ng-if="item.tag==3">自</span>
+              <span md-highlight-text="purchase.searchText" md-highlight-flags="^i">{{item.title}}</span>
+            </md-item-template>
+            <md-not-found>未搜索到配件</md-not-found>
+            </md-autocomplete>
+
+            <!-- 报价框 -->
+            <section purchase-item>
+              <purchase ng-repeat="(index, item) in purchase.items"
+                item="item"
+                attrs="purchase.attrs"
+                key="index"
+                del-item="purchase.delItem(index)"
+              </purchase>
+                <!-- check-quote="purchase.checkQuote()" -->
+            </section>
+        </div>
+
+  </div>
+
+  <!-- 车型选择 -->
+  <md-sidenav class="md-sidenav-left md-whiteframe-z2 brand" md-component-id="brand">
+    <!-- <md-toolbar class="md-theme-light">
+      <h1 class="md-toolbar-tools">品牌</h1>
+    </md-toolbar> -->
+    <md-content>
+      <div layout="column" layout-align="center center">
+        <div class="search-icon"><md-icon>search</md-icon></div>
+        <input type="text" ng-model="search.first_letter" placeholder="根据首字母筛选品牌">
+      </div>
+      <section ng-repeat="brands in purchase.cars | orderBy : 'first_letter' | filter:search">
+        <md-subheader class="md-warn md-no-sticky">{{brands.first_letter}} ({{brands.brand.length}})</md-subheader>
+        <md-divider></md-divider>
+        <md-list>
+          <md-list-item class="md-1-line" ng-repeat="brand in brands.brand" ng-click="purchase.getSeries(brand)">
+              <img ng-src="{{brand.image}}?imageView2/1/w/60/h/40" class="md-avatar" alt="{{brand.title}}">
+              <div class="md-list-item-text">
+                <span class="md-subhead">{{brand.title}}</span>
+              </div>
+          </md-list-item>
+        </md-list>
+      </section>
+    </md-content>
+  </md-sidenav>
+
+  <!-- 车系选择 -->
+  <md-sidenav class="md-sidenav-left md-whiteframe-z2 series" md-component-id="series">
+    <md-content>
+      <div layout="column" layout-align="center center">
+        <div class="search-icon"><md-icon>search</md-icon></div>
+        <span class="retrun-icon" ng-click="purchase.back()"><md-icon>navigate_before</md-icon>返回</span>
+        <input type="text" ng-model="search.automaker" placeholder="根据生产厂商筛选车系">
+      </div>
+      <section ng-repeat="series in purchase.series | orderBy : 'automaker' | filter:search">
+        <md-subheader class="md-warn md-no-sticky">{{series.automaker}} ({{series.series.length}})</md-subheader>
+        <md-divider></md-divider>
+        <md-list>
+          <md-list-item class="md-1-line" ng-repeat="car in series.series" ng-click="purchase.selSeries(car)">
+              <!-- <img ng-src="{{car.image}}" class="md-avatar" alt="{{car.title}}"> -->
+              <div class="md-list-item-text">
+                <span class="md-subhead">{{car.title}}</span>
+              </div>
+          </md-list-item>
+        </md-list>
+      </section>
+    </md-content>
+  </md-sidenav>
+
+  </md-content>
+</div>
+
+

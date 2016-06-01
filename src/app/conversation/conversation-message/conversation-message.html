@@ -1,0 +1,188 @@
+<!-- 对话详情 -->
+<div ng-show="conversationMessage.IMView" flex layout="column" class="chat">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <md-button class="md-icon-button menu-button" aria-label="Menu" hide-gt-sm ng-click="conversationMessage.toggle('menu')">
+        <md-icon>menu</md-icon>
+        <span ng-if="conversationMessage.hasUnreadMessage" class="notice"></span>
+      </md-button>
+      <h2 class="header-name">
+        <span>
+        {{conversationMessage.$state.params.clientId[0] === '@' ? (conversationMessage.currentChatUser.realname || conversationMessage.conv.text) : conversationMessage.conv.name}}
+        {{conversationMessage.isTyping}}
+        </span>
+        <p class="title" ng-if="conversationMessage.conv.name !== 'WPIM' && conversationMessage.$state.params.clientId[0] === '@'">{{conversationMessage.currentChatUser.merchant.name}}
+          <span ng-if="conversationMessage.currentChatUser.merchant.real_name_certification" class="circle red">实</span>
+          <span ng-if="conversationMessage.currentChatUser.merchant.weipei_certification" class="circle indigo">微</span>
+          <span ng-if="conversationMessage.currentChatUser.merchant.logistics_certification" class="circle blue">物</span>
+          <span ng-if="conversationMessage.currentChatUser.merchant.invoice_certification" class="circle green">票</span>
+        </p>
+      </h2>
+      <span flex></span>
+      <!-- TODO: 待 sdk 支持后直接判断暂态会话，不用间接从 member 判断 -->
+      <!-- <md-button class="md-icon-button"
+                aria-label="Add Clients"
+                ng-click="conversationMessage.showAddUserDialog()">
+        <md-icon>add</md-icon>
+      </md-button> -->
+      <!-- <md-button ng-if="conversationMessage.isGroupConversation && conversationMessage.conv.members.length"
+                class="md-icon-button"
+                aria-label="Online Clients"
+                hide-gt-md
+                ng-click="conversationMessage.toggle('online')">
+        <md-icon>group</md-icon>
+      </md-button> -->
+    </div>
+  </md-toolbar>
+  <!-- <md-content infinite-list infinite-scroll="conversationMessage.loadMore()" infinite-scroll-distance='20' layout-padding flex class="messages"> -->
+  <md-content layout-padding flex class="messages">
+    <div class="messages-wrapper">
+      <div class="loading" ng-if="conversationMessage.loading">
+        <div class="loading-img">加载中...</div>
+      </div>
+
+      <message ng-repeat="(index, message) in conversationMessage.messages track by (message.timestamp + '|' + conversationMessage.messages[index - 1].timestamp)"
+        message="message"
+        mine="conversationMessage.currentUser"
+        chat="conversationMessage.currentChatUser"
+        ng-if="message"
+        previous-message="conversationMessage.messages[index - 1]"
+        show-image="conversationMessage.showImage($event,message.data || message.content)"
+        quote-click="conversationMessage.quote($event,message.content.attr.inquiry_sheet_id || message.content.attr.attribute_id)"
+        order-click="conversationMessage.order($event,message.content.attr.inquiry_sheet_id || message.content.attr.attribute_id)"
+        play-voice="conversationMessage.playVoice($event,message)"
+        is-mine="message.from === undefined || message.from == conversationMessage.userService.user.uuid">
+      </message>
+      <div id="message-view-bottom"></div>
+    </div>
+  </md-content>
+
+  <md-toolbar class="md-menu-toolbar">
+    <div layout="row">
+        <md-menu-bar ng-init="conversationMessage.emojifyTable=false;initMenu=false">
+        <!-- <md-menu> -->
+          <md-button aria-label="Open demo menu" class="md-icon-button" ng-disabled="conversationMessage.conv.name === 'WPIM'" ng-click="conversationMessage.emojifyTable=!conversationMessage.emojifyTable;initMenu=true;">
+            <md-icon>mood</md-icon>
+            <md-tooltip  md-direction="bottom">选择表情</md-tooltip>
+          </md-button>
+          <md-menu-content width="6" ng-if="initMenu" class="emojify-table animated" ng-class="{'bounceInUp':conversationMessage.emojifyTable,'bounceOut':!conversationMessage.emojifyTable}">
+            <md-content layout-padding>
+              <md-grid-list
+                  md-cols-gt-md="12" md-cols-md="12" md-cols="8"
+                  md-row-height-gt-md="3:2" md-row-height="3:2"
+                  md-gutter-gt-md="6px" md-gutter-md="6px" md-gutter="4px">
+                <md-grid-tile ng-repeat="emojify in conversationMessage.EMOJIFYS" ng-click="conversationMessage.typeEmojify(emojify)">
+                  <img align="absmiddle" alt=":{{emojify}}:" class="emoji" ng-src="../../assets/image/basic/{{emojify}}.png" title="{{emojify}}"></img>
+                </md-grid-tile>
+              </md-grid-list>
+            </md-content>
+          </md-menu-content>
+        </md-menu-bar>
+        <!-- 发送图片 -->
+        <md-menu-bar>
+          <md-button aria-label="Open demo menu" class="md-icon-button" ng-disabled="conversationMessage.conv.name === 'WPIM'">
+            <md-icon>image</md-icon>
+            <!-- <input ng-disabled="conversationMessage.conv.name === 'WPIM'" id="inputImage" type="file" accept="image/*" image="conversationMessage.myImageFile" ng-model="conversationMessage.myImageFile" resize-max-height="1000" resize-max-width="1000" resize-quality="0.7" resize-type="image/jpg" /> -->
+            <md-tooltip  md-direction="bottom">选择图片</md-tooltip>
+          </md-button>
+          <input ng-disabled="conversationMessage.conv.name === 'WPIM'" id="inputImage" type="file" accept="image/*" image="conversationMessage.myImageFile" ng-model="conversationMessage.myImageFile" resize-max-height="1000" resize-max-width="1000" resize-quality="0.7" resize-type="image/jpg" />
+        </md-menu-bar>
+    </div>
+  </md-toolbar>
+
+  <md-content layout layout-align="center center" class="editor-wrapper">
+    <pre ng-show="conversationMessage.conv.name !== 'WPIM'" id="editArea" class="edit_area"  contenteditable="true"
+            ng-click="conversationMessage.emojifyTable=false"
+            ng-keyup="conversationMessage.conv.name !== 'WPIM' &&  conversationMessage.keyup($event)"
+            ng-keypress="conversationMessage.conv.name !== 'WPIM' && conversationMessage.editorChangedHandler($event)" flex></pre>
+  </md-content>
+  <div class="action">
+          <span class="desc">按下Shift+Enter换行</span>
+          <md-button class="primary" ng-disabled="conversationMessage.conv.name === 'WPIM'" ng-click="conversationMessage.emojifyTable=false;conversationMessage.send()">send</md-button>
+  </div>
+</div>
+<!-- 联系人详情 -->
+<div ng-show="!conversationMessage.IMView" flex layout="column">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <md-button class="md-icon-button menu-button" aria-label="Menu" hide-gt-sm ng-click="conversationMessage.toggle('menu')">
+        <md-icon>menu</md-icon>
+        <span ng-if="conversationMessage.hasUnreadMessage" class="notice"></span>
+      </md-button>
+      <h2 class="header-name">详细信息</h2>
+      <span flex></span>
+    </div>
+  </md-toolbar>
+  <md-content layout-padding flex class="contacts">
+    <div class="contacts-wrapper">
+        <img class="img" ng-if="!conversationMessage.currentChatUser.merchant.image" src="../../assets/image/avatar2.jpg" alt="...">
+        <img class="img" ng-if="conversationMessage.currentChatUser.merchant.image"
+                ng-src="{{conversationMessage.currentChatUser.merchant.image+'?imageView2/1/w/150/h/150'}}" alt="...">
+        <h3>{{conversationMessage.currentChatUser.realname}}</h3>
+        <p class="grey">{{conversationMessage.currentChatUser.merchant.name}}</p>
+        <p>
+          <span ng-if="conversationMessage.currentChatUser.merchant.real_name_certification" class="circle red">实</span>
+          <span ng-if="conversationMessage.currentChatUser.merchant.weipei_certification" class="circle indigo">微</span>
+          <span ng-if="conversationMessage.currentChatUser.merchant.logistics_certification" class="circle blue">物</span>
+          <span ng-if="conversationMessage.currentChatUser.merchant.invoice_certification" class="circle green">票</span>
+        </p>
+        <p class="grey">{{conversationMessage.currentChatUser.merchant.province_name}}-{{conversationMessage.currentChatUser.merchant.city_name}}-{{conversationMessage.currentChatUser.merchant.district_name}}</p>
+        <p class="grey">{{conversationMessage.currentChatUser.merchant.address}}</p>
+        <md-button class="btn btn-30" ng-click="conversation.viewTo(conversationMessage.currentChatUser,true)">发送消息</md-button>
+    </div>
+  </md-content>
+</div>
+
+            <!-- ng-if="conversationMessage.isGroupConversation && conversationMessage.conv.members.length" -->
+<md-sidenav id="online-aside"
+                  ng-if="conversationMessage.isGroupConversation && conversationMessage.conv.members.length"
+                  class=" md-sidenav-right md-whiteframe-z2"
+                  md-component-id="online"
+                  md-is-locked-open="$mdMedia('gt-md')"
+                  layout="column">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <md-button class="md-icon-button" aria-label="Back" hide-gt-sm ng-click="conversationMessage.close('online')">
+        <md-icon>arrow_back</md-icon>
+      </md-button>
+      <h2>在线用户 ({{conversationMessage.conv.members.length}})</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" aria-label="Search" ng-click="conversationMessage.toggle('online-search')">
+        <md-icon>search</md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-list class="square-clients" flex>
+    <md-list-item ng-repeat="client in conversationMessage.conv.members.slice(0, conversationMessage.maxResultsAmount)" ng-click="conversationMessage.changeTo('@' + client)">
+      <p> {{ client }} </p>
+    </md-list-item>
+    <p ng-if="conversationMessage.conv.members.length > conversationMessage.maxResultsAmount" class="max-results-amount-hint">最多显示 {{:: conversationMessage.maxResultsAmount }} 位在线用户</p>
+  </md-list>
+</md-sidenav>
+
+<md-sidenav id="online-aside"
+            ng-if="conversationMessage.isGroupConversation && conversationMessage.conv.members.length"
+            class=" md-sidenav-right md-whiteframe-z2"
+            md-component-id="online-search"
+            layout="column">
+  <form ng-submit="$event.preventDefault()">
+    <div class="search-box" layout layout-align="center center">
+      <md-button class="md-icon-button" aria-label="Back" ng-click="conversationMessage.close('online-search')">
+        <md-icon>arrow_back</md-icon>
+      </md-button>
+      <input type="text" flex ng-model="conversationMessage.queryString" ng-change="conversationMessage.query(conversationMessage.queryString)" placeholder="搜索在线用户" md-sidenav-focus>
+      <md-button class="md-icon-button" aria-label="Clear" ng-click="conversationMessage.clearQuery()" ng-hide="conversationMessage.queryString===''">
+        <md-icon>clear</md-icon>
+      </md-button>
+    </div>
+    <md-divider></md-divider>
+
+  </form>
+  <md-list class="result" flex>
+    <md-list-item ng-repeat="client in conversationMessage.queryClients.slice(0, conversationMessage.maxResultsAmount)" ng-click="conversationMessage.changeTo('@' + client)">
+      <p class="result-item"> {{ client }} </p>
+    </md-list-item>
+    <p ng-if="conversationMessage.queryClients.length > conversationMessage.maxResultsAmount" class="max-results-amount-hint">最多显示 {{:: conversationMessage.maxResultsAmount }} 条结果</p>
+  </md-list>
+</md-sidenav>
+

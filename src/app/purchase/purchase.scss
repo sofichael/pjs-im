@@ -1,0 +1,330 @@
+.purchase{
+  background: #fafafa;
+  md-toolbar{
+    background:#fafafa;
+    z-index:10;
+    .merchant-loading{
+      position: absolute;
+      margin-left: -30px;
+      margin-top: 2px;
+    }
+  }
+  .content {
+    background: #fafafa;
+    padding: 0;
+  }
+  .colleagues{
+    color:#999;
+  }
+  md-card{
+      margin:0;
+      padding:0;
+      border-radius: 8px;
+      .input-code {
+          margin-bottom:10px;
+          input{
+            padding:6px 35px;
+            line-height: 40px;
+            font-size: 24px;
+            display: inline-block;
+            letter-spacing: 20px;
+            border: 1px solid #ddd;
+            border-radius:5px;
+            width: 350px;
+          }
+          .msg{
+            font-size: 14px;
+            color:#F44336;
+            margin-bottom:0;
+          }
+      }
+      .progress{
+        margin: 0 0 0 -20px;
+      }
+      .code-img{
+        background:url(../../assets/image/20160521142805.png) center center;
+        // background-size:cover;
+        background-repeat:no-repeat;
+        height: 470px;
+      }
+  }
+
+  .purchase-sheet{
+    z-index: 9;
+    transition: bottom .8s;
+    bottom: -500px;
+
+    .flex-30{
+      md-card{
+        height: 210px;
+        .header img{
+          margin:0;
+        }
+        .name{
+          margin:5px;
+          font-size: 18px;
+          font-weight: 400;
+        }
+        .mobile{
+          margin:5px;
+        }
+        md-card-header{
+          padding:8px 0;
+          md-card-header-text .md-title{
+            font-size: 18px;
+            font-weight: 400;
+            margin:0;
+          }
+        }
+      }
+    }
+
+    .flex-70{
+      md-card{
+        height:210px;
+      }
+    }
+    md-checkbox.md-checked ._md-icon{
+      background-color:#FFB022;
+    }
+    .box{
+      margin: 8px 16px 8px 16px;
+      box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
+      border-radius: 8px;
+    }
+    .add-car-btn{
+      width:95%;
+      border:1px solid #ddd;
+      color:#FFB022;
+      background-color:#F3F3F3;
+    }
+
+    md-autocomplete .md-whiteframe-z1{
+      box-shadow:none;
+      border-bottom:1px solid #FFBC43;
+    }
+
+    .search-icon{
+      margin:8px 0 0 8px;
+      position:absolute;
+      z-index:9;
+      margin-left:25%;
+      transition:margin-left .5s;
+      span{
+        margin-left:6px;
+      }
+    }
+    .item-icon{
+      margin: 10px 0 0 35px;
+      position: absolute;
+      z-index: 9;
+    }
+    md-autocomplete input{
+      transition:padding-left .5s;
+      padding-left:40px;
+    }
+    .grey{
+      color:#9e9e9e;
+    }
+    .yellow{
+      color:#FFB022 ;
+    }
+    .btn-submit{
+      padding:2px 15px;
+      width:80%;
+    }
+    .margin-left-0{
+      margin-left:0;
+    }
+    .md-list-item-text{
+      margin: 5px 0;
+      padding: 5px 0 5px 30px;
+      p{
+        margin:0 0;
+        .price{
+          color:#F29F20;
+          font-size:22px;
+          font-weight:bold;
+        }
+        .num{
+          color:#F29F20;
+          font-size:14px;
+        }
+        .level{
+          margin:0 8px 0 15px;
+          font-weight:bold;
+        }
+        .quality{
+
+        }
+      }
+      .notes{
+        color:#999;
+        margin-top:5px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        word-wrap: normal;
+      }
+      md-icon{
+        cursor: pointer;
+        &:hover{
+          color:#EF5350;
+        }
+      }
+    }
+    .md-list-item-text.edit-hover:hover{
+      background:#eaeaea;
+      cursor: pointer;
+    }
+    .quote-box-edit{
+      padding: 0px 0 0px 20px;
+      &>div{
+        margin-bottom: 0;
+      }
+      md-select{
+        margin:0 0 0 10px;
+      }
+     input.price{
+        padding-left: 5px;
+        margin-right:5px;
+        height: 30px;
+        width: 80px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        background:#fafafa;
+        &.price-invalid{
+          border: 1px solid #EF5350;
+        }
+      }
+     input.num{
+        padding-left: 5px;
+        height: 30px;
+        width: 70px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        background:#fafafa;
+        &.price-invalid{
+          border: 1px solid #EF5350;
+        }
+      }
+      .level md-select-value{
+        width: 80px;
+      }
+      .quality md-select-value{
+        width: 100px;
+      }
+      .arrival md-select-value{
+        width: 80px;
+      }
+      md-select-value{
+        padding:0 10px 2px;
+        width: 100px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+      }
+      md-icon{
+        cursor: pointer;
+      }
+      .notes{
+        margin: 0 15px;
+        input{
+          width:100%;
+          border-radius: 0;
+          border:none;
+          line-height: 25px;
+          border-bottom: 1px solid #ddd;
+        }
+      }
+    }
+    .add-price{
+      cursor: pointer;
+      md-icon{
+        color:#F29F20;
+        font-size:20px;
+        margin-right: 10px;
+      }
+      color:#F29F20;
+      font-size:12px;
+    }
+    .msg{
+      font-size:12px;
+      color:#EF5350;
+    }
+
+    //选择车型css
+    .md-sidenav-left {
+        .search-icon {
+          margin: 10px 0 0 8px;
+        }
+       input{
+          width: 100%;
+          height: 40px;
+          border: 1px solid #ddd;
+          padding-left: 35px;
+          border-radius: 6px;
+        }
+        .md-warn{
+          line-height: 20px;
+          font-size: 18px;
+          ._md-subheader-inner{
+            padding:10px 5px 10px 5px;
+          }
+        }
+
+        md-list-item{
+          &:hover{
+            background:#EFEFEF;
+          }
+          height:48px;
+          .md-avatar{
+            margin-top: 0;
+            margin-bottom: 0;
+            margin-left: 10px;
+            margin-right:10px;
+            width: 60px;
+            height: 40px;
+          }
+          .md-list-item-text{
+            margin:0;
+            padding:0;
+          }
+        }
+      }
+    .md-sidenav-left.series{
+        .search-icon {
+          margin: 10px 0 0 10px;
+          left:70px;
+        }
+        .retrun-icon{
+          position: absolute;
+          margin-top: 9px;
+          cursor: pointer;
+          md-icon {
+            margin-top:-3px;
+          }
+        }
+        input{
+          width: 75%;
+          height: 40px;
+          border: 1px solid #ddd;
+          padding-left: 30px;
+          margin-left:60px;
+          border-radius: 6px;
+        }
+        .md-warn{
+          font-size: 16px;
+          ._md-subheader-inner{
+            padding:10px 5px 10px 5px;
+          }
+        }
+        md-list-item{
+          .md-list-item-text{
+            margin:0 15px;
+            padding:0;
+          }
+        }
+      }
+  }
+}
+

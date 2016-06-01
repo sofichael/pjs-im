@@ -1,0 +1,21 @@
+{
+  "name": "angular-emojify",
+  "main": "angular-emojify.js",
+  "version": "0.1.2",
+  "description": "Angular directive to emojify unicode chars",
+  "keywords": [
+    "angular",
+    "emojify",
+    "emoji",
+    "unicode",
+    "codegent"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

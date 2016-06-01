@@ -1,0 +1,429 @@
+/**
+ *  Do not remove this comments bellow. It's the markers used by wiredep to inject
+ *  sass dependencies when defined in the bower.json of your dependencies
+ */
+// bower:scss
+// endbower
+
+// @font-face {
+//   font-family: 'radikal';
+//   src: url('../assets/fonts/nootype_-_radikal_bold-webfont.eot');
+//   src: url('../assets/fonts/nootype_-_radikal_bold-webfont.eot?#iefix') format('embedded-opentype'),
+//        url('../assets/fonts/nootype_-_radikal_bold-webfont.woff2') format('woff2'),
+//        url('../assets/fonts/nootype_-_radikal_bold-webfont.woff') format('woff'),
+//        url('../assets/fonts/nootype_-_radikal_bold-webfont.ttf') format('truetype');
+//   font-weight: normal;
+//   font-style: normal;
+// }
+
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Material Icons'), local('MaterialIcons-Regular'),
+  // url(https://fonts.gstatic.com/s/materialicons/v13/2fcrYFNaTjcS6g4U3t-Y5ZjZjT5FdEJ140U2DJYC3mY.woff2) format('woff2');
+  url('../assets/fonts/2fcrYFNaTjcS6g4U3t-Y5ZjZjT5FdEJ140U2DJYC3mY.woff2') format('woff2'),
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
+
+::-webkit-scrollbar {
+    height: 12px;
+    width: 0px;
+    // width: 5px;
+    background: white;
+}
+::-o-scrollbar {
+    height: 12px;
+    width: 0px;
+    // width: 5px;
+    background: white;
+}
+
+::-webkit-scrollbar-thumb {
+    width: 8px;
+    background: rgba(80, 80, 80, 0.5);
+    -webkit-border-radius: 1ex;
+    -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
+}
+
+::-webkit-scrollbar-corner {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+:focus {
+    outline: none;
+}
+
+.logo {
+  font:  1.5em 'radikal';
+  color: #2c97e8;
+}
+
+[layout=row] {
+  flex-direction: row;
+}
+
+.browsehappy {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+
+[ui-view] {
+  height: 100%;
+  // background-color: rgba(0,0,0,.1);
+}
+
+body{
+  background: url(../assets/image/bg/11.jpg) no-repeat center;
+  -webkit-background-size: cover;
+  background-size: cover;
+  overflow: hidden;
+  font-family: "Helvetica Neue",Helvetica,"Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+
+.is-mobile{
+  text-align:center;
+  margin:0px;
+  padding-top:10%;
+}
+
+.text-center{
+  text-align:center;
+}
+
+.margin-top-0{
+  margin-top:0;
+}
+
+.btn{
+  color : white;
+  background-color: #FFB022;
+  border-radius: 5px;
+  font-size: 16px;
+}
+.btn:not([disabled]):hover {
+  background-color: #FFA400;
+  color: white;
+}
+
+.btn:not([disabled]).md-focused {
+  background-color: #FFA400;
+  color: white;
+}
+
+.btn[disabled] {
+  color : rgb(187, 187, 187);
+  background-color: rgba(230, 230, 229, 0.96);
+}
+
+.btn-30{
+  width:30%;
+}
+
+.primary{
+  color : #999;
+  border:1px solid rgb(187, 187, 187);
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* loaded */
+#loader-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000
+}
+
+#loader-wrapper .loader-section {
+    position: fixed;
+    top: 0;
+    width: 51%;
+    height: 100%;
+    background: #eceff1;
+    z-index: 1000;
+    -webkit-transform: translateX(0);
+    -ms-transform: translateX(0);
+    transform: translateX(0)
+}
+
+#loader-wrapper .loader-section.section-left {
+    left: 0
+}
+
+#loader-wrapper .loader-section.section-right {
+    right: 0
+}
+
+#loader {
+    display: block;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    width: 150px;
+    height: 150px;
+    margin: -75px 0 0 -75px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #3498db;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+    z-index: 1001
+}
+
+#loader:before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #e74c3c;
+    -webkit-animation: spin 3s linear infinite;
+    animation: spin 3s linear infinite
+}
+
+#loader:after {
+    content: "";
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #f9c922;
+    -webkit-animation: spin 1.5s linear infinite;
+    animation: spin 1.5s linear infinite
+}
+
+#loader-logo {
+    display: block;
+    position: absolute;
+    left: 48%;
+    top: 46%;
+    background: url("../images/user-bg-2.jpg") no-repeat center center;
+    z-index: 1001
+}
+
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        transform: rotate(0deg)
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        transform: rotate(360deg)
+    }
+}
+
+@keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        transform: rotate(0deg)
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        transform: rotate(360deg)
+    }
+}
+
+body[visible="true"] #loader-wrapper {
+    visibility: hidden;
+    -webkit-transform: translateY(-100%);
+    -ms-transform: translateY(-100%);
+    transform: translateY(-100%);
+    -webkit-transition: all 0.3s 1s ease-out;
+    transition: all 0.3s 1s ease-out
+}
+
+body[visible="true"] #loader-wrapper .loader-section.section-left {
+    -webkit-transform: translateX(-100%);
+    -ms-transform: translateX(-100%);
+    transform: translateX(-100%);
+    -webkit-transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1)
+}
+
+body[visible="true"] #loader-wrapper .loader-section.section-right {
+    -webkit-transform: translateX(100%);
+    -ms-transform: translateX(100%);
+    transform: translateX(100%);
+    -webkit-transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1)
+}
+
+body[visible="true"] #loader {
+    opacity: 0;
+    -webkit-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out
+}
+
+/* loaded */
+
+
+
+/* main css */
+.main {
+  height: 80%;
+  min-height: 600px;
+  // min-height: 667px;
+  padding-top: 100px;
+  -webkit-transition: padding .3s linear;
+  -ms-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  display: block;
+}
+
+@media (max-width: 1000px),(max-height:800px) {
+    .main {
+        padding-top:0;
+        height: 100%
+    }
+}
+
+.main-box {
+  max-width: 1000px;
+  min-width: 800px;
+  height: 100%;
+  // min-height:600px;
+  margin: 0 auto;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  overflow: hidden;
+  display: block;
+}
+/* main end */
+
+// .md-virtual-repeat-container.md-autocomplete-suggestions-container{
+//   left: 15px !important;
+//   width: 300px;
+// }
+/* chat css voice_gray_playing.gif*/
+.voice_gray {
+  background: url(../assets/image/sprite.png) 0 -2427px;
+  width: 23px;
+  height: 23px;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.mine .voice_gray {
+  background: url(../assets/image/sprite.png) 0 -2450px;
+  width: 23px;
+  height: 23px;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.voice_gray_playing {
+  background: url(../assets/image/voice_gray_playing.gif);
+  width: 23px;
+  height: 23px;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.mine .voice_gray_playing {
+  background: url(../assets/image/voice_playing.gif);
+  width: 23px;
+  height: 23px;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.qrcode {
+  display: block;
+  margin: 24px auto 16px;
+  max-width: 100%;
+}
+
+span.progress{
+  margin: 0 0 0 -20px;
+}
+
+md-progress-linear{
+  height:2px;
+}
+
+md-autocomplete md-autocomplete-wrap md-progress-linear ._md-mode-indeterminate{
+  height: 1.5px;
+}
+
+md-progress-circular.md-hue-2 path{
+  // stroke:#FFB022;
+  stroke:#FB4444;
+}
+
+.icon-spin {
+    -webkit-animation: icon-spin 1s infinite linear;
+    animation: icon-spin 1s infinite linear
+}
+
+@-webkit-keyframes icon-spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg)
+    }
+
+    100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg)
+    }
+}
+
+@keyframes icon-spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg)
+    }
+
+    100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg)
+    }
+}
+
+
+/**
+ *  Do not remove this comments bellow. It's the markers used by gulp-inject to inject
+ *  all your sass files automatically
+ */
+// injector
+// endinjector

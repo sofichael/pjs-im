@@ -1,0 +1,151 @@
+.accounting{
+  .accounting-loading{
+    position: absolute;
+    margin-left: -30px;
+    margin-top: 2px;
+  }
+  md-backdrop.md-opaque{
+    opacity:0;
+  }
+  p{
+    margin:0 0 5px 0;
+  }
+  .flex-30{
+    border-right:1px solid #D2D2D2;
+  }
+  .btn{
+    width:50%;
+    margin:5px;
+  }
+
+  md-whiteframe {
+    &:before{
+      content:"";
+      position: absolute;
+      right: 100%;
+      top: 15px;
+        width: 0;
+      height: 0;
+      border-top: 5px solid transparent;
+      border-right: 6px solid #D0D0D0;
+      border-bottom: 5px solid transparent;
+    }
+    &:after{
+      content:"";
+      position: absolute;
+      right: 100%;
+      top: 15px;
+        width: 0;
+      height: 0;
+      border-top: 4px solid transparent;
+      border-right: 5px solid white;
+      border-bottom: 4px solid transparent;
+    }
+    background: #fff;
+    max-width: 270px;
+    width: 270px;
+    position: absolute;
+    top: 85px;
+    left: 17%;
+    border-radius:5px;
+    z-index: 60;
+    md-list{
+      padding:0;
+      md-list-item {
+        border-bottom: 1px solid #EFEFEF;
+        width: 270px;
+        ._md-list-item-inner{
+          padding:0 5px;
+        }
+      }
+      md-checkbox{
+        margin-right:0;
+        &.md-checked ._md-icon{
+            background-color:#FFB022;
+        }
+        ._md-icon{
+            border-width:0;
+        }
+      }
+    }
+    p{
+      font-size: 14px;
+      margin: 5px;
+      color: #505050;
+      width: 100%;
+    }
+    .btn{
+      font-size:12px;
+      line-height: 24px;
+      min-height: 24px;
+      margin:15px 0;
+      width:30%;
+    }
+  }
+
+  .info{
+    font-size:12px;
+    color:#999;
+    margin:0;
+  }
+  .money{
+    color:#F9A000;
+    margin:0;
+  }
+  .bank-info{
+    font-size:12px;
+    color:#333;
+    margin:0;
+  }
+  .note{
+    font-size:12px;
+    color:#999;
+    margin:0;
+  }
+
+  //right column css
+  .name{
+    font-size:14px;
+    margin:0;
+  }
+  .fee{
+    color:#333;
+  }
+
+  .label-status {
+      padding: 2px 10px;
+      color: #fff;
+      font-weight: 300;
+      font-size: 10px;
+      -webkit-border-radius: 4px;
+      -moz-border-radius: 4px;
+      border-radius: 4px;
+      background-clip: padding-box;
+  }
+  .green{
+      background-color: #6FE474 !important;
+  }
+  .top-green{
+    border-top: 4px solid #6FE474;
+  }
+  .top-yellow{
+    border-top: 4px solid #FFB022;
+  }
+  .amber{
+      background-color: #ffa000 !important;
+  }
+  .grey{
+      background-color: #CECDCD !important;
+  }
+  .top-grey{
+    border-top: 4px solid #CECDCD;
+  }
+
+  .text-link{
+    margin-top:5px;
+    font-size:12px;
+    color:#106CC8;
+    text-decoration: blink;
+  }
+
+}

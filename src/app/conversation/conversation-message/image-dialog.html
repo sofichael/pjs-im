@@ -1,0 +1,20 @@
+<md-dialog aria-label="image">
+    <!-- <md-dialog-content style="max-width:400px;"> -->
+    <!-- style="overflow-y: hidden;min-width: 240px;max-width: 600px;min-height: 330px;"> -->
+    <md-dialog-content ng-style="{'width':data.attr.width,'height':data.attr.height,'max-height':maxHeight}"
+      style="overflow-y: hidden;min-width: 240px;max-width: 600px;">
+      <img style="margin: auto; width: 100%;height:100%;"
+      ng-style="{'-webkit-transform':deg,'-moz-transform':deg,'-ms-transform':deg,'-o-transform':deg,'transform':deg}"
+      ng-src="{{data.url || data.text}}" ng-alt="{{data.url || data.text}}">
+    </md-dialog-content>
+
+    <md-dialog-actions layout="row">
+      <span flex></span>
+      <md-button ng-click="rotate()">
+       <md-icon>cached</md-icon>
+      </md-button>
+      <md-button ng-click="cancel()" style="margin-right:20px;">
+       <md-icon>close</md-icon>
+      </md-button>
+    </md-dialog-actions>
+</md-dialog>

@@ -1,0 +1,230 @@
+<md-sidenav class="menu md-sidenav-left md-whiteframe-z2" layout="column"
+  ng-class="{ 'under-mask': !conversation.isMenuOpen } "
+  md-component-id="menu"
+  md-is-open="conversation.isMenuOpen"
+  md-is-locked-open="$mdMedia('gt-sm')">
+  <div flex layout="column" style="overflow:auto;">
+    <div class="chat-header">
+        <md-list-item class="md-2-line" md-no-ink>
+          <md-menu class="profile">
+            <img ng-src="{{conversation.userService.user.avatar_url+'?imageView2/1/w/52/h/52'}}" class="md-avatar" alt="..." aria-label="Open menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+            <md-menu-content class="profile-content" width="4">
+                <md-card>
+                  <img ng-src="{{conversation.userService.user.avatar_url+'?imageView2/1/w/256/h/256'}}" class="md-card-image" alt="...">
+                  <md-card-title>
+                    <md-card-title-text>
+                      <span class="md-headline">{{conversation.userService.user.realname}}</span>
+                    </md-card-title-text>
+                  </md-card-title>
+                  <md-card-content>
+                    <p><label class="label" for="">商户名：</label>{{conversation.userService.user.merchant.name}}</p>
+                    <p><label class="label" for="">商户信息：</label>{{conversation.userService.user.merchant.contact}} / {{conversation.userService.user.merchant.contact_number}}</p>
+                    <p><label class="label" for="">地区：</label>{{conversation.userService.user.merchant.province_name}}-{{conversation.userService.user.merchant.city_name}}-{{conversation.userService.user.merchant.district_name}}</p>
+                  </md-card-content>
+                </md-card>
+            </md-menu-content>
+          </md-menu>
+          <div class="md-list-item-text">
+            <h3> {{conversation.userService.user.realname}} </h3>
+          </div>
+          <div class="md-menu-btn-right">
+          <md-menu ng-init="alarm=false;volume=false;">
+              <md-button aria-label="Open menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                <md-icon>menu</md-icon>
+              </md-button>
+              <md-menu-content width="2">
+                    <!-- <md-menu-item>
+                      <md-button ng-click="conversation.blankPage('quote')"><md-icon>exit_to_app</md-icon><span md-menu-align-target>报价</span></md-button>
+                    </md-menu-item> -->
+                    <md-menu-item>
+                      <md-button ng-click="conversation.blankPage('purchase')"><md-icon>picture_in_picture</md-icon><span md-menu-align-target>直发采购</span></md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                      <md-button ng-click="conversation.blankPage('accounting')"><md-icon>picture_in_picture</md-icon><span md-menu-align-target>账务</span></md-button>
+                    </md-menu-item>
+                    <!-- <md-menu-item>
+                      <md-icon><span ng-if="volume">volume_up</span><span ng-if="!volume">volume_off</span></md-icon>
+                      <md-switch class="md-primary volume-1" ng-model="volume" aria-label="volume1">
+                      </md-switch>
+                      <md-tooltip  md-direction="right"><span ng-if="volume">声音开启</span><span ng-if="!volume">声音关闭</span></md-tooltip>
+                    </md-menu-item>
+                    <md-menu-item>
+                      <md-icon><span ng-if="alarm">alarm_on</span><span ng-if="!alarm">alarm_off</span></md-icon>
+                      <md-switch class="md-primary alarm-1" ng-model="alarm" aria-label="alarm1">
+                      </md-switch>
+                      <md-tooltip  md-direction="right"><span ng-if="alarm">提示开启</span><span ng-if="!alarm">提示关闭</span></md-tooltip>
+                    </md-menu-item>
+                    <md-menu-item>
+                      <md-button ng-click="conversation.feedback()"><md-icon>email</md-icon><span md-menu-align-target>问题&反馈</span></md-button>
+                    </md-menu-item> -->
+                    <md-menu-item>
+                      <md-button ng-click="conversation.logout()"><md-icon>exit_to_app</md-icon><span md-menu-align-target>退出</span></md-button>
+                    </md-menu-item>
+              </md-menu-content>
+          </md-menu>
+
+          </div>
+        </md-list-item>
+    </div>
+
+    <!-- search box -->
+    <div layout="row" class="auto-search">
+      <div flex="10"><md-icon ng-class="{'grey':conversation.searchIcon}">search</md-icon></div>
+      <div flex>
+          <md-autocomplete
+              ng-disabled="!conversation.repos"
+              md-no-cache="false"
+              md-selected-item="conversation.selectedItem"
+              md-search-text-change="conversation.searchTextChange(conversation.searchText)"
+              md-search-text="conversation.searchText"
+              md-selected-item-change="user && conversation.selectedItemChange(user)"
+              md-items="user in conversation.querySearch(conversation.searchText) | orderBy : 'realname'"
+              md-item-text="user.realname"
+              md-min-length="1"
+              placeholder="搜索联系人"
+              md-menu-class="autocomplete-custom">
+            <md-item-template>
+              <div class="contact-item" ng-if="user.title">{{user.title}}</div>
+              <div class="contact-item" ng-if="!user.title">
+                <div class="avatar">
+                    <img class="img" ng-if="!user.avatar_url" src="../../assets/image/avatar2.jpg" alt="...">
+                    <img class="img" ng-if="user.avatar_url" ng-src="{{user.avatar_url+'?imageView2/1/w/45/h/45'}}" alt="...">
+                </div>
+                <div class="info">
+                  <h3 class="nickname">
+                      <span class="nickname_text">{{user.realname}}</span>
+                  </h3>
+                  <p class="msg">
+                  <span>{{user.merchant.name}}</span>
+                </div>
+              </div>
+            </md-item-template>
+            <!-- <md-not-found>未搜索到联系人</md-not-found> -->
+            <md-divider></md-divider>
+          </md-autocomplete>
+      </div>
+    </div>
+    <!-- search box end-->
+    <!-- <md-list flex> -->
+    <md-tabs md-border-bottom="true" md-dynamic-height="false" class="md-accent" md-align-tabs="top" md-no-pagination="true" md-selected="conversation.tabSelectedIndex">
+      <md-tab id="tab1">
+        <md-tab-label><md-icon>message</md-icon></md-tab-label>
+        <md-tab-body>
+            <div class="divider"></div>
+            <!-- loading...加载完成隐藏 -->
+            <div class="spinner" ng-if="!conversation.getUserListDone">
+              <div class="bounce1"></div>
+              <div class="bounce2"></div>
+              <div class="bounce3"></div>
+            </div>
+            <md-list class="chat-list" ng-if="conversation.conversations.length>0">
+            <md-list-item
+              ng-repeat="conv in conversation.conversations | orderBy: '-lastMessageTime'"
+              ng-if="conv.id == conversation.config.sysConversation"
+              ng-click="conversation.sysTo(conv.id)"
+              ng-class="{'active': conv.id === conversation.currentConversation.id}">
+              <div class="chat-item">
+                <div class="ext">
+                  <p class="attr">{{conv.lastMessage.timestamp | date : 'hh:mm'}}</p>
+                  <p class="attr-count">
+                  <span ng-if="conv.unreadMessagesCount" class="unreadCount">{{conv.unreadMessagesCount}}</span>
+                  </p>
+                </div>
+                <div class="avatar" ng-click="conversation.sysTo(conv.id)">
+                    <img class="img" src="../../assets/image/default.png" alt="..." height="45" width="45">
+                </div>
+                <div class="info">
+                  <h3 class="nickname">
+                      <span class="nickname-text">
+                        <span class="name on-line">{{:: conv.name }}</span>
+                  </h3>
+                  <p class="msg" ng-show="conv.lastMessage">
+                      <!-- <span>{{conv.lastMessage.content.text}}</span> -->
+                      <span ng-show="conv.lastMessage.content.type===-1 && !conv.lastMessage.content.attr" id="bindEmoji-{{conversation.config.sysConversation}}"></span>
+                      <span ng-show="conv.lastMessage.content.type===-1 && conv.lastMessage.content.attr">{{conv.lastMessage.content.text}}</span>
+                  </p>
+                </div>
+              </div>
+            </md-list-item>
+            <md-list-item
+              ng-repeat="conv in conversation.conversations | orderBy: '-lastMessageTime'"
+              ng-if="conv.members.length === 2"
+              ng-click="conversation.changeTo(conv,false)"
+              ng-class="{'active': conv.id === conversation.currentConversation.id}">
+              <div class="chat-item">
+                <div class="ext">
+                  <p class="attr">{{conv.lastMessage.timestamp | date : 'hh:mm'}}</p>
+                  <p class="attr-count">
+                  <span ng-show="conv.unreadMessagesCount" class="unreadCount">{{conv.unreadMessagesCount}}</span>
+                  </p>
+                </div>
+                <div class="avatar" ng-click="conversation.changeTo(conv,false)">
+                    <img class="img" ng-show="!conv.memberInfo.avatar_url" src="../../assets/image/default.png" alt="...">
+                    <img class="img" ng-show="conv.memberInfo.avatar_url" ng-src="{{conv.memberInfo.avatar_url+'?imageView2/1/w/45/h/45'}}" alt="...">
+                </div>
+                <div class="info">
+                  <h3 class="nickname">
+                      <span class="nickname-text">
+                        <span class="name" ng-class="{'on-line':conv.onLine}">{{:: conv.memberInfo.realname }}</span>
+                        <span class="nickname-title"> | {{conv.memberInfo.merchant.name}}</span></span>
+                  </h3>
+                  <p class="msg" ng-show="conv.lastMessage">
+                      <span ng-show="conv.lastMessage.content.type===-1 && !conv.lastMessage.content.attr" id="bindEmoji-{{conversation.getSingleConvTarget(conv.members)}}"></span>
+                      <span ng-show="conv.lastMessage.content.type===-1 && conv.lastMessage.content.attr">{{conv.lastMessage.content.text}}</span>
+                      <span ng-show="conv.lastMessage.content.type===-2">「图片信息」</span>
+                      <span ng-show="conv.lastMessage.content.type===-3">「语音消息」</span>
+                  </p>
+                </div>
+              </div>
+            </md-list-item>
+            </md-list>
+
+            <div class="empty-list-hint" layout-padding>点击通讯录与好友会话</div>
+        </md-tab-body>
+      </md-tab>
+      <md-tab id="tab2">
+        <md-tab-label><md-icon>recent_actors</md-icon></md-tab-label>
+        <md-tab-body>
+            <!-- 联系人列表 -->
+            <md-content>
+              <div class="divider"></div>
+              <!-- loading...加载完成隐藏 -->
+              <div class="spinner" ng-if="!conversation.getContactListDone">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+              </div>
+              <section ng-repeat="value in conversation.contactList | orderBy : 'first_letter'" ng-if="conversation.contactList.length>0">
+                <md-subheader class="md-warn">{{value.first_letter}} ({{value.user.length}}人)</md-subheader>
+                <md-list>
+                  <md-list-item class="md-2-line" ng-repeat="contact in value.user"
+                      ng-click="conversation.viewTo(contact,false)"
+                      ng-class="{'active': contact.uuid === conversation.$state.params.clientId}">
+                      <div class="chat-item">
+                        <div class="avatar">
+                            <img class="img" ng-if="!contact.avatar_url" src="../../assets/image/avatar2.jpg" alt="...">
+                            <img class="img" ng-if="contact.avatar_url" ng-src="{{contact.avatar_url+'?imageView2/1/w/45/h/45'}}" alt="...">
+                        </div>
+                        <div class="info">
+                          <h3 class="nickname">
+                              <span class="nickname_text">{{contact.realname}}</span>
+                          </h3>
+                          <p class="msg">
+                            <span>{{contact.merchant.name}}</span>
+                          </p>
+                        </div>
+                      </div>
+                  </md-list-item>
+                </md-list>
+              </section>
+              <div class="empty-list-hint" layout-padding>请先使用微配app添加维修厂到通讯录</div>
+            </md-content>
+        </md-tab-body>
+      </md-tab>
+    </md-tabs>
+  </div>
+  <md-divider></md-divider>
+</md-sidenav>
+
+<div layout flex ui-view>
+</div>

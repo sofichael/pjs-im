@@ -1,0 +1,113 @@
+<md-divider></md-divider>
+<div layout="row" layout-align="space-between center" layout-margin class="accessory-item" ng-mouseenter="itemClaer=true" ng-mouseleave="itemClaer=false">
+  <div flex="95" class="margin-left-0">
+      <span class="circle indigo" ng-if="vm.item.tag==1">专</span>
+      <span class="circle blue" ng-if="vm.item.tag==2">全</span>
+      <span class="circle green" ng-if="vm.item.tag==3">自</span>
+      <span class="md-subhead">{{vm.item.title}}</span>
+      <span class="md-subhead price" ng-if="vm.item.orderAccessory.quoted.length>0">￥{{vm.item.orderAccessory.quoted | getTotal}}</span>
+      <!-- && vm.item.id===vm.item.orderAccessory.accessories_id -->
+      <span class="md-subhead msg" ng-show="vm.item.msg">暂未添加任何报价</span>
+  </div>
+  <div flex="5" ng-click="vm.delItem(vm.key)" ng-show="itemClaer">
+    <md-icon>clear<md-tooltip  md-direction="bottom">删除该配件</md-tooltip></md-icon>
+  </div>
+</div>
+<md-divider></md-divider>
+
+<div layout="row" layout-align="space-between center" layout class="md-list-item-text"
+      ng-repeat="(key, quote) in vm.item.orderAccessory.quoted">
+      <!-- ng-if="vm.item.id===vm.item.orderAccessory.accessories_id" -->
+  <div flex="95" ng-click="">
+    <p>
+        <span class="price">{{quote.price | currency:"￥"}}</span>
+        <span class="num">x {{quote.number}}</span>
+        <span class="level">{{quote.accessories_level | attributeString:1}}</span>
+        <span class="quality">|&nbsp;{{quote.accessories_quality_gurantee_period | attributeString:2}}</span>
+        <span class="arrival">|&nbsp;{{quote.accessories_arrival | attributeString:3}}</span>
+    </p>
+    <p class="notes">{{quote.notes}}</p>
+  </div>
+  <div flex="5" ng-click="vm.delQuote(key)">
+    <md-icon>clear<md-tooltip  md-direction="bottom">删除该报价</md-tooltip></md-icon>
+  </div>
+</div>
+<!-- <div class="quote-box-edit">
+  <div layout="row" layout-align="space-between center" layout-margin>
+    <div layout="row" layout-align="space-around center">
+      <input class="price" type="number" value="value.price" ng-model="value.price" min="0.01">
+      <md-select class="level" name="level" aria-label="level" ng-model="value.accessories_level" value="value.accessories_level">
+        <md-option ng-repeat="attr in quote.quoteAttributes[0].attribute_sub" value="{{attr.attribute_id}}" ng-selected="attr.attribute_id==value.accessories_level">
+          {{attr.attribute_name}}
+        </md-option>
+      </md-select>
+      <md-select class="quality" name="quality" aria-label="quality" ng-model="value.accessories_quality_gurantee_period" value="value.accessories_quality_gurantee_period">
+        <md-option ng-repeat="attr in quote.quoteAttributes[1].attribute_sub" value="{{attr.attribute_id}}" ng-selected="attr.attribute_id==value.accessories_quality_gurantee_period">
+          {{attr.attribute_name}}
+        </md-option>
+      </md-select>
+      <md-select class="arrival" name="arrival" aria-label="arrival" ng-model="value.accessories_arrival" value="value.accessories_arrival">
+        <md-option ng-repeat="attr in quote.quoteAttributes[2].attribute_sub" value="{{attr.attribute_id}}" ng-selected="attr.attribute_id==value.accessories_arrival">
+          {{attr.attribute_name}}
+        </md-option>
+      </md-select>
+    </div>
+    <div>
+      <md-icon ng-click="quote.editCancel()">clear
+        <md-tooltip  md-direction="bottom">取消编辑</md-tooltip>
+      </md-icon>
+      <md-icon ng-click="quote.editDone(value)">done
+        <md-tooltip  md-direction="bottom">确认修改</md-tooltip>
+      </md-icon>
+    </div>
+  </div>
+  <div class="notes">
+    <input class="note"  type="text" value="value.notes" ng-model="value.notes">
+  </div>
+</div> -->
+<div class="quote-box-edit" ng-if="vm.addBox">
+  <form name="vm.form">
+  <div layout="row" layout-align="space-between center" layout-margin>
+    <div layout="row" layout-align="space-around center">
+      <input class="price" type="number" ng-model="vm.addQuote.price" min="0.01" placeholder="价格">
+      <input class="num" type="number" ng-model="vm.addQuote.number" min="1" placeholder="数量">
+      <md-select class="level" name="level" aria-label="level" ng-model="vm.addQuote.accessories_level" value="vm.addQuote.accessories_level">
+        <md-option selected value="0">级别</md-option>
+        <md-option ng-repeat="attr in vm.attrs[0].attribute_sub" value="{{attr.attribute_id}}" ng-selected="attr.attribute_id==value.accessories_level">
+          {{attr.attribute_name}}
+        </md-option>
+      </md-select>
+      <md-select class="quality" name="quality" aria-label="quality" ng-model="vm.addQuote.accessories_quality_gurantee_period" value="vm.addQuote.accessories_quality_gurantee_period">
+        <md-option selected value="0">质保</md-option>
+        <md-option ng-repeat="attr in vm.attrs[1].attribute_sub" value="{{attr.attribute_id}}" ng-selected="attr.attribute_id==value.accessories_quality_gurantee_period">
+          {{attr.attribute_name}}
+        </md-option>
+      </md-select>
+      <md-select class="arrival" name="arrival" aria-label="arrival" ng-model="vm.addQuote.accessories_arrival" value="vm.addQuote.accessories_arrival">
+        <md-option selected value="0">到货情况</md-option>
+        <md-option ng-repeat="attr in vm.attrs[2].attribute_sub" value="{{attr.attribute_id}}" ng-selected="attr.attribute_id==value.accessories_arrival">
+          {{attr.attribute_name}}
+        </md-option>
+      </md-select>
+    </div>
+    <div>
+      <md-icon ng-click="vm.addCancel()">clear
+        <md-tooltip  md-direction="bottom">取消添加</md-tooltip>
+      </md-icon>
+      <md-icon ng-click="vm.checkQuote() || vm.addDone(vm.addQuote)">done
+        <md-tooltip  md-direction="bottom">确认添加</md-tooltip>
+      </md-icon>
+    </div>
+  </div>
+  <div class="notes" ng-init="vm.addQuote.notes=''">
+    <input class="note"  type="text" name="notes" value="vm.addQuote.notes" ng-model="vm.addQuote.notes" placeholder="备注">
+  </div>
+  </form>
+</div>
+<div layout="row" layout-align="start center" layout>
+  <md-button class="add-price" ng-click="vm.add()">
+    <md-icon>add_circle_outline</md-icon>&nbsp;&nbsp;添加价格与数量
+  </md-button>
+  <p class="msg">{{quote.msg}}</p>
+</div>
+
